@@ -1,0 +1,36 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+
+
+.grid {
+    display:flex;
+}
+
+.board {
+    background-color:rgba(104, 66, 126, 0.4);
+    box-shadow: 0 0 8px white;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 0 0 2rem;
+  padding-left: 2rem;
+}
+
+.aside h2 {
+    font-size: 3rem;
+    /* text-align: center; */
+    margin: 2rem 0 3rem;
+    letter-spacing: 1rem;
+}
+

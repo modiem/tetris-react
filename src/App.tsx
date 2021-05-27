@@ -1,7 +1,10 @@
+import Tetris from "./components/Tetris";
+
+
 function App() {
   return (
     <div>
-      <h1>Tetris</h1>
+      <Tetris/>
     </div>
   );
 }
