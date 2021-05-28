@@ -1,62 +1,83 @@
-import { useState } from "react";
-
-export type GameState = {
-  score: number;
-  level: number;
-  lines: number;
-  isGameOver: boolean;
-  isPause: boolean;
-};
+import { useEffect, useReducer } from "react";
+import type { GameState } from "../utils/types";
 
 const initialState: GameState = {
   score: 0,
-  level: 0,
+  level: 1,
   lines: 0,
   isGameOver: true,
   isPause: false,
 };
 
+type ActionType =
+  | "ResetGame"
+  | "SetGameOver"
+  | "TogglePause"
+  | "AddLines"
+  | "ChangeScore"
+  | "ChangeLevel";
+
+function reducer(
+  prevState: GameState,
+  action: { type: ActionType; payload?: number }
+): GameState {
+  switch (action.type) {
+    case "ResetGame": {
+      return {
+        ...initialState,
+        isGameOver: false,
+      };
+    }
+    case "SetGameOver": {
+      return {
+        ...prevState,
+        isGameOver: true,
+      };
+    }
+    case "TogglePause": {
+      return {
+        ...prevState,
+        isPause: !prevState.isPause,
+      };
+    }
+    case "AddLines": {
+      return {
+        ...prevState,
+        lines: prevState.lines + action.payload!,
+      };
+    }
+    case "ChangeScore": {
+      return {
+        ...prevState,
+        score: prevState.score + action.payload!,
+      };
+    }
+    case "ChangeLevel": {
+      let level = prevState.level + action.payload!;
+      if (level < 1) {
+        level = 1;
+      } else if (level > 20) {
+        level = 20;
+      } 
+      return {
+        ...prevState,
+        level: level,
+      };
+    }
+    default:
+      return prevState;
+  }
+}
+
 const useGame = () => {
-  const [gameState, setGameState] = useState(initialState);
+  const [gameState, dispatchGame] = useReducer(reducer, initialState);
 
-  function toggleStartGame() {
-    setGameState((prev) => {
-      return {
-        ...prev,
-        isGameOver: !prev.isGameOver,
-      };
-    });
-  }
+  const flooredLines = Math.floor(gameState.lines / 3);
+  useEffect(() => {
+    dispatchGame({ type: "ChangeLevel", payload: 1 });
+  }, [flooredLines, dispatchGame]);
 
-  function togglePause() {
-    setGameState((prev) => {
-      return {
-        ...prev,
-        isPause: !prev.isPause,
-      };
-    });
-  }
-
-  function logScore(lines: number, score: number) {
-    setGameState((prev) => {
-      return {
-        ...prev,
-        score: prev.score + score,
-        lines: prev.lines + lines,
-      };
-    });
-  }
-
-  const incrementLevel = () => {
-    setGameState((prev) => {
-      return {
-        ...prev,
-        level: prev.level++,
-      };
-    });
-  };
-
-  return [gameState, toggleStartGame, togglePause,logScore, incrementLevel] as const;
+  return [gameState, dispatchGame] as const;
 };
 
 export default useGame;

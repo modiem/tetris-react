@@ -1,9 +1,7 @@
 import Stage from "./Stage";
 import classes from "./Tetris.module.css";
 import Display from "./UI/Display";
-
-//import types and data
-import data from "../gameHelper";
+import { POINTS } from "../utils/constants";
 
 //import hooks
 import useStage from "../hooks/useStage";
@@ -12,41 +10,59 @@ import useGame from "../hooks/useGame";
 import React, { useEffect } from "react";
 
 const Tetris = () => {
-  const [playerState, dispatchPlayer] = usePlayer();
   const [stageState, renewStage, clearStage] = useStage();
-  const [gameState, toggleStartGame, togglePause, logScore, incrementLevel] =
-    useGame();
+  const [gameState, dispatchGame] = useGame();
+  const [playerState, dispatchPlayer] = usePlayer(stageState, gameState);
 
-  useEffect(() => {
-    let id: NodeJS.Timeout;
-    if (!gameState.isPause) {
-      id = setInterval(
-        () => dispatchPlayer({ type: "ArrowDown", payload: stageState }),
-        1000
-      );
+  //check GameOver
+  const isGameOver = stageState[0].some(element=>element !== 0)
+  useEffect(()=>{
+    if (isGameOver) {
+      dispatchGame({type: 'SetGameOver'})
     }
-    return () => {
-      clearInterval(id);
-    };
-  }, [playerState, gameState]);
-
+  },[gameState.isGameOver, isGameOver])
+  
   useEffect(() => {
-    //change stage
-    // console.table(stageState);
-    if (playerState.isCollided) {
-      renewStage(playerState);
+    if (!isGameOver && playerState.isCollided) {
+
+      //update stage && update line
+      const clearedRows = renewStage(playerState);
+      dispatchGame({ type: "AddLines", payload: clearedRows });
+
+      //update score: 1. drop score
+      dispatchGame({
+        type: "ChangeScore",
+        payload: POINTS[playerState.dropType],
+      });
+
+      //update score: 2. clear line score
+      let addScore = POINTS.NONE;
+      if (clearedRows > 3) {
+        addScore = POINTS.TETRIS;
+        dispatchGame({type:"ChangeLevel", payload: -2})
+      } else if (clearedRows > 2) {
+        dispatchGame({ type: "ChangeLevel", payload: -1 });
+        addScore = POINTS.TRIPLE;
+      } else if (clearedRows > 1) {
+        addScore = POINTS.DOUBLE;
+      } else if (clearedRows > 0) {
+        addScore = POINTS.SINGLE;
+      }
+      dispatchGame({ type: "ChangeScore", payload: addScore });
+
+      //change piece
       dispatchPlayer({ type: "Reset" });
     }
-  }, [playerState.isCollided, dispatchPlayer]);
+  }, [isGameOver,playerState.isCollided]);
 
   const startGameHandler = (event: React.MouseEvent) => {
     event.preventDefault();
     if (gameState.isGameOver) {
-      toggleStartGame();
+      dispatchGame({ type: "ResetGame" });
       clearStage();
       dispatchPlayer({ type: "Reset" });
     } else {
-      togglePause();
+      dispatchGame({ type: "TogglePause" });
     }
   };
 
@@ -73,9 +89,9 @@ const Tetris = () => {
         <aside className={classes.aside}>
           <div>
             <h2>Tetris</h2>
-            <Display title="Score" value={0} />
-            <Display title="Lines" value={0} />
-            <Display title="Level" value={0} />
+            <Display title="Score" value={gameState.score} />
+            <Display title="Lines" value={gameState.lines} />
+            <Display title="Level" value={gameState.level} />
             <canvas>Next Tetriminoe</canvas>
           </div>
 

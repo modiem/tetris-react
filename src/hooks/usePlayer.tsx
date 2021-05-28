@@ -1,33 +1,20 @@
 import { useReducer, useEffect } from "react";
-import { TetriminosObj } from "../gameHelper";
-import type { Tetrimino } from "../gameHelper";
-import type { StageState } from "./useStage";
-import { rotate, isValid } from "../gameHelper";
-
-export type Player = {
-  x: number;
-  y: number;
-  shape: (Tetrimino | 0)[][];
-  color: string;
-  isCollided: boolean;
-  next: Tetrimino;
-};
-
-function randomType(): Tetrimino {
-  const lst = Object.keys(TetriminosObj) as Array<Tetrimino>;
-  return lst[Math.floor(Math.random() * 7)];
-}
+import { TETRIMINOS } from "../utils/tetriminos";
+import { LEVEL } from "../utils/constants";
+import type { Player, Tetrimino, StageState, GameState } from "../utils/types";
+import { randomTetri, rotate, isValid } from "../utils/functions";
 
 function createNewPlayer(type: Tetrimino = "L"): Player {
-  const shape = TetriminosObj[type].shape;
-  const color = TetriminosObj[type].color;
+  const shape = TETRIMINOS[type].shape;
+  const color = TETRIMINOS[type].color;
   return {
     x: 4,
-    y: 0, //-(shape.length),
+    y: -1, //-(shape.length),
     shape: shape,
     color: color,
     isCollided: false,
-    next: randomType(),
+    dropType: "NONE",
+    next: randomTetri(),
   };
 }
 
@@ -52,6 +39,7 @@ function reducer(
       } else {
         return {
           ...prevState,
+          dropType: "SOFT_DROP",
           isCollided: true,
         };
       }
@@ -96,11 +84,12 @@ function reducer(
           ...newPlayer,
           y: newPlayer.y + 1,
         };
-      };
+      }
       return {
         ...newPlayer,
-        y: newPlayer.y -1,
-        isCollided:true,
+        y: newPlayer.y - 1,
+        isCollided: true,
+        dropType: "HARD_DROP",
       };
     }
     default:
@@ -108,8 +97,21 @@ function reducer(
   }
 }
 
-const usePlayer = () => {
+const usePlayer = (stageState: StageState, gameState: GameState) => {
   const [playerState, dispatchPlayer] = useReducer(reducer, createNewPlayer());
+
+  useEffect(() => {
+    let id: NodeJS.Timeout;
+    if (!gameState.isGameOver && !gameState.isPause) {
+      id = setInterval(
+        () => dispatchPlayer({ type: "ArrowDown", payload: stageState }),
+        LEVEL[gameState.level]
+      );
+    }
+    return () => {
+      clearInterval(id);
+    };
+  }, [playerState, gameState]);
 
   return [playerState, dispatchPlayer] as const;
 };

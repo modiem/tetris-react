@@ -1,13 +1,13 @@
 import { useRef, useEffect } from "react";
-import data, {TetriminosObj} from "../gameHelper";
-import type { StageState } from "../hooks/useStage";
-import type { Player } from "../hooks/usePlayer";
-import type {GameState} from '../hooks/useGame';
+import data from "../utils/constants";
+import {TETRIMINOS} from '../utils/tetriminos';
+import type { StageState, Player, GameState } from "../utils/types";
 
 
-const COLS = data.StageObj.COLS;
-const ROWS = data.StageObj.ROWS;
-const BLOCK_SIZE = data.StageObj.BLOCK_SIZE;
+
+const COLS = data.COLS;
+const ROWS = data.ROWS;
+const BLOCK_SIZE = data.BLOCK_SIZE;
 
 // window.requestAnimFrame = (function () {
 //   return (
@@ -61,7 +61,7 @@ const Stage: React.FC<{
       stageState.forEach((row, y) =>
         row.forEach((col, x) => {
           if (col !== 0) {
-            const color = TetriminosObj[col].color
+            const color = TETRIMINOS[col].color
             drawSquare(color, x, y, ctx!);
           }
         })

@@ -1,35 +1,27 @@
-import { useCallback, useEffect, useState } from "react";
-import data, {clearRows} from "../gameHelper";
-import type { Player } from "./usePlayer";
-import type { Tetrimino } from "../gameHelper";
-
-
-const COLS = data.StageObj.COLS;
-const ROWS = data.StageObj.ROWS;
-
-export type StageState = Array<Array<Tetrimino | 0>>; //string | 0 [][];
-
-const emptyStage: StageState = Array.from({ length: ROWS }, () =>
-  Array(COLS).fill(0)
-);
-
-
+import { useState } from "react";
+import { emptyStage } from "../utils/constants";
+import { clearRows } from "../utils/functions";
+import type { Player, Tetrimino, StageState } from "../utils/types";
 
 const useStage = () => {
   const [stageState, setStage] = useState(emptyStage);
 
+  // let clearedRows = 0;
   const renewStage = (playerState: Player) => {
     const newStage: StageState = JSON.parse(JSON.stringify(stageState));
-    playerState.shape.forEach((row, y) =>
-      row.forEach((cell, x) => {
-        if (cell !== 0) {
-          newStage[playerState.y + y][playerState.x + x] = cell;
-        }
-      })
-    );
-    const [newState, rows] = clearRows(newStage);
+    playerState.shape.forEach((row, y) => {
+      if (playerState.y + y >= 0) {
+        row.forEach((cell, x) => {
+          if (cell !== 0) {
+            newStage[playerState.y + y][playerState.x + x] = cell;
+          }
+        });
+      }
+    });
+
+    const [newState, clearedRows] = clearRows(newStage);
     setStage(() => newState);
-      //useRedux for score
+    return clearedRows;
   };
 
   const clearStage = () => {
