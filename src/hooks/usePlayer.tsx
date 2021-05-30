@@ -9,7 +9,7 @@ function createNewPlayer(type: Tetrimino = "L"): Player {
   const color = TETRIMINOS[type].color;
   return {
     x: 4,
-    y: -1, //-(shape.length),
+    y: 0,
     shape: shape,
     color: color,
     isCollided: false,
@@ -25,7 +25,8 @@ function reducer(
   switch (action.type) {
     case "Reset": {
       //get next player
-      const newPlayer = createNewPlayer(prevState.next);
+      const newPlayer = createNewPlayer(prevState.next)
+
       //assign the former next player to new player
       return newPlayer;
     }

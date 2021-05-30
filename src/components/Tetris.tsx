@@ -8,6 +8,7 @@ import useStage from "../hooks/useStage";
 import usePlayer from "../hooks/usePlayer";
 import useGame from "../hooks/useGame";
 import React, { useEffect } from "react";
+import Next from "./Next";
 
 const Tetris = () => {
   const [stageState, renewStage, clearStage] = useStage();
@@ -39,14 +40,21 @@ const Tetris = () => {
       let addScore = POINTS.NONE;
       if (clearedRows > 3) {
         addScore = POINTS.TETRIS;
-        dispatchGame({type:"ChangeLevel", payload: -2})
+        if (gameState.level > 6) {
+          dispatchGame({ type: "ChangeLevel", payload: -3 });
+        }
       } else if (clearedRows > 2) {
-        dispatchGame({ type: "ChangeLevel", payload: -1 });
         addScore = POINTS.TRIPLE;
+        if (gameState.level > 6) {
+          dispatchGame({ type: "ChangeLevel", payload: -2 });
+        }
       } else if (clearedRows > 1) {
         addScore = POINTS.DOUBLE;
       } else if (clearedRows > 0) {
         addScore = POINTS.SINGLE;
+        if (gameState.level>7) {
+          dispatchGame({ type: "ChangeLevel", payload: -1 });
+        }
       }
       dispatchGame({ type: "ChangeScore", payload: addScore });
 
@@ -92,7 +100,8 @@ const Tetris = () => {
             <Display title="Score" value={gameState.score} />
             <Display title="Lines" value={gameState.lines} />
             <Display title="Level" value={gameState.level} />
-            <canvas>Next Tetriminoe</canvas>
+            <Display title="Next" value={null} />
+            <Next playerState={playerState} gameState={gameState} />
           </div>
 
           <button onClick={startGameHandler}>

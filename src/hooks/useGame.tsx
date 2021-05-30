@@ -56,8 +56,8 @@ function reducer(
       let level = prevState.level + action.payload!;
       if (level < 1) {
         level = 1;
-      } else if (level > 20) {
-        level = 20;
+      } else if (level > 10) {
+        level = 10;
       } 
       return {
         ...prevState,

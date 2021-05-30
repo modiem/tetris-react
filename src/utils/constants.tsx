@@ -6,6 +6,7 @@ const data = {
   BLOCK_SIZE: 30,
   BG_COLOR: `rgba(104, 66, 126, 0.4)`,
 };
+export default data;
 
 export const emptyStage: StageState = Array.from({ length: data.ROWS }, () =>
   Array(data.COLS).fill(0)
@@ -48,4 +49,4 @@ export const LEVEL:levelType = {
   // 29+ is 20ms
 };
 
-export default data;
+

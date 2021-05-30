@@ -1,4 +1,4 @@
-import type {Tetrimino} from './types';
+import type { Tetrimino } from "./types";
 
 type tetriObj = {
   [key in Tetrimino]: {
@@ -14,11 +14,11 @@ export const TETRIMINOS: tetriObj = {
       ["L", 0],
       ["L", "L"],
     ],
-    color: `rgb(252, 107, 3)`,
+    color: "#3d84b8",
   },
   I: {
-    shape: [["I"], ["I"], ["I"], ["I"]],
-    color: "orange",
+    shape: [["I", "I", "I", "I"]],
+    color: "#e25822",
   },
   J: {
     shape: [
@@ -26,35 +26,34 @@ export const TETRIMINOS: tetriObj = {
       [0, "J"],
       ["J", "J"],
     ],
-    color: "blue",
+    color: "#006a71",
   },
   O: {
     shape: [
       ["O", "O"],
       ["O", "O"],
     ],
-    color: "yellow",
+    color: "#f1bc31",
   },
   S: {
     shape: [
       [0, "S", "S"],
       ["S", "S", 0],
     ],
-    color: "green",
+    color: "#a9294f",
   },
   T: {
     shape: [
       ["T", "T", "T"],
       [0, "T", 0],
     ],
-    color: "purple",
+    color: "#ad62aa",
   },
   Z: {
     shape: [
       ["Z", "Z", 0],
       [0, "Z", "Z"],
     ],
-    color: "red",
+    color: "#206a5d",
   },
 };
-

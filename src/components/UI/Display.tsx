@@ -7,7 +7,7 @@ type Props = {
     value: number,
 }
 
-const Display:React.FC<{title:string, value:number}> = (props) => {
+const Display:React.FC<{title:string, value:number | null}> = (props) => {
     return <div className={classes.score}>{props.title}: <span>{props.value}
         </span></div>
 };

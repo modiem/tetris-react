@@ -59,3 +59,16 @@ export const clearRows = (arr: StageState) => {
   });
   return [newArr, clearedRows] as const;
 };
+
+export function drawSquare(
+  color: string | 0,
+  x: number,
+  y: number,
+  ctx: CanvasRenderingContext2D
+) {
+  if (color !== 0) {
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, 1, 1);
+  }
+};
