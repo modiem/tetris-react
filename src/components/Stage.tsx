@@ -1,8 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, Fragment, useState } from "react";
+import Modal from "./UI/Modal";
 import data from "../utils/constants";
 import { TETRIMINOS } from "../utils/tetriminos";
 import type { StageState, Player, GameState } from "../utils/types";
 import { drawSquare } from "../utils/functions";
+import GameOverPage from "./GameOverPage";
 
 const COLS = data.COLS;
 const ROWS = data.ROWS;
@@ -27,6 +29,8 @@ const Stage: React.FC<{
 }> = ({ playerState, stageState, className, gameState }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const isGameOver = gameState.isGameOver;
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas!.getContext("2d");
@@ -42,7 +46,7 @@ const Stage: React.FC<{
     ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
     ctx!.beginPath();
 
-    if (!gameState.isGameOver) {
+    if (!isGameOver) {
       //draw stage
       stageState.forEach((row, y) =>
         row.forEach((element, x) => {

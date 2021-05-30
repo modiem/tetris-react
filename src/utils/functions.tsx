@@ -49,14 +49,17 @@ export function isValid(playerState: Player, stage: StageState) {
 export const clearRows = (arr: StageState) => {
   let clearedRows = 0;
   const newArr: StageState = [];
-  arr.forEach((row, y) => {
-    if (!row.some((ele) => ele === 0)) {
-      clearedRows++;
-      newArr.unshift(Array(data.COLS).fill(0));
-    } else {
-      newArr.push(row);
-    }
-  });
+
+  // setTimeout(() => {
+    arr.forEach((row, y) => {
+      if (!row.some((ele) => ele === 0)) {
+        clearedRows++;
+        newArr.unshift(Array(data.COLS).fill(0));
+      } else {
+        newArr.push(row);
+      }
+    });
+  // }, 1000);
   return [newArr, clearedRows] as const;
 };
 
@@ -71,4 +74,4 @@ export function drawSquare(
     ctx.fillStyle = color;
     ctx.fillRect(x, y, 1, 1);
   }
-};
+}

@@ -1,3 +1,5 @@
+import {useState} from 'react';
+
 import Stage from "./Stage";
 import classes from "./Tetris.module.css";
 import Display from "./UI/Display";
@@ -7,10 +9,12 @@ import { POINTS } from "../utils/constants";
 import useStage from "../hooks/useStage";
 import usePlayer from "../hooks/usePlayer";
 import useGame from "../hooks/useGame";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import Next from "./Next";
+import GameOverPage from "./GameOverPage";
 
 const Tetris = () => {
+  const [openModal, setOpenModal] = useState(false)
   const [stageState, renewStage, clearStage] = useStage();
   const [gameState, dispatchGame] = useGame();
   const [playerState, dispatchPlayer] = usePlayer(stageState, gameState);
@@ -20,6 +24,7 @@ const Tetris = () => {
   useEffect(()=>{
     if (isGameOver) {
       dispatchGame({type: 'SetGameOver'})
+      setOpenModal(true);
     }
   },[gameState.isGameOver, isGameOver])
   
@@ -65,6 +70,7 @@ const Tetris = () => {
 
   const startGameHandler = (event: React.MouseEvent) => {
     event.preventDefault();
+    closeModalHandler(event);
     if (gameState.isGameOver) {
       dispatchGame({ type: "ResetGame" });
       clearStage();
@@ -81,41 +87,54 @@ const Tetris = () => {
     }
   };
 
-  return (
-    <div
-      className={classes.container}
-      onKeyDown={movePlayerHandler}
-      tabIndex={0}
-    >
-      <div className={classes.grid}>
-        <Stage
-          className={classes.board}
-          stageState={stageState}
-          playerState={playerState}
-          gameState={gameState}
-        />
-        <aside className={classes.aside}>
-          <div>
-            <h2>Tetris</h2>
-            <Display title="Score" value={gameState.score} />
-            <Display title="Lines" value={gameState.lines} />
-            <Display title="Level" value={gameState.level} />
-            <Display title="Next" value={null} />
-            <Next playerState={playerState} gameState={gameState} />
-          </div>
+  const closeModalHandler = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setOpenModal(false)
+  }
 
-          <button onClick={startGameHandler}>
-            {`${
-              gameState.isGameOver
-                ? "Start Game"
-                : gameState.isPause
-                ? "Continue"
-                : "Pause"
-            }`}
-          </button>
-        </aside>
+  return (
+    <Fragment>
+      {openModal && 
+        <GameOverPage 
+        score={gameState.score} reStart={startGameHandler} 
+        closeModal={closeModalHandler}
+        />
+      }
+      <div
+        className={classes.container}
+        onKeyDown={movePlayerHandler}
+        tabIndex={0}
+      >
+        <div className={classes.grid}>
+          <Stage
+            className={classes.board}
+            stageState={stageState}
+            playerState={playerState}
+            gameState={gameState}
+          />
+          <aside className={classes.aside}>
+            <div>
+              <h2>Tetris</h2>
+              <Display title="Score" value={gameState.score} />
+              <Display title="Lines" value={gameState.lines} />
+              <Display title="Level" value={gameState.level} />
+              <Display title="Next" value={null} />
+              <Next playerState={playerState} gameState={gameState} />
+            </div>
+
+            <button onClick={startGameHandler}>
+              {`${
+                gameState.isGameOver
+                  ? "Start Game"
+                  : gameState.isPause
+                  ? "Continue"
+                  : "Pause"
+              }`}
+            </button>
+          </aside>
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
