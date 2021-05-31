@@ -112,7 +112,7 @@ const usePlayer = (stageState: StageState, gameState: GameState) => {
     return () => {
       clearInterval(id);
     };
-  }, [playerState, gameState]);
+  }, [playerState, gameState, stageState]);
 
   return [playerState, dispatchPlayer] as const;
 };

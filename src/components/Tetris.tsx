@@ -26,7 +26,7 @@ const Tetris = () => {
       dispatchGame({type: 'SetGameOver'})
       setOpenModal(true);
     }
-  },[gameState.isGameOver, isGameOver])
+  },[dispatchGame, isGameOver])
   
   useEffect(() => {
     if (!isGameOver && playerState.isCollided) {
@@ -91,6 +91,7 @@ const Tetris = () => {
     event.preventDefault();
     setOpenModal(false)
   }
+
 
   return (
     <Fragment>
