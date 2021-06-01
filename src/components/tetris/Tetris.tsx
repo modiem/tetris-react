@@ -2,13 +2,13 @@ import {useState} from 'react';
 
 import Stage from "./Stage";
 import classes from "./Tetris.module.css";
-import Display from "./UI/Display";
-import { POINTS } from "../utils/constants";
+import Display from "../UI/Display";
+import { POINTS } from "../../utils/constants";
 
 //import hooks
-import useStage from "../hooks/useStage";
-import usePlayer from "../hooks/usePlayer";
-import useGame from "../hooks/useGame";
+import useStage from "../../hooks/useStage";
+import usePlayer from "../../hooks/usePlayer";
+import useGame from "../../hooks/useGame";
 import React, { Fragment, useEffect } from "react";
 import Next from "./Next";
 import GameOverPage from "./GameOverPage";

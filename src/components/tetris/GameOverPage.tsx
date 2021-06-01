@@ -1,6 +1,6 @@
 import React from 'react';
-import Form from './UI/Form';
-import Modal from './UI/Modal';
+import Form from '../UI/Form';
+import Modal from '../UI/Modal';
 
 const GameOverPage: React.FC<{
   score: number;
