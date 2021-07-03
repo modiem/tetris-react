@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { drawSquare } from "../../utils/functions";
-import { GameState, Player } from "../../utils/types";
-import { TETRIMINOS } from "../../utils/tetriminos";
-import data from "../../utils/constants";
+import { drawSquare } from "../utils/functions";
+import { GameState, Player } from "../utils/types";
+import { TETRIMINOS } from "../utils/tetriminos";
+import data from "../utils/constants";
 import classes from "./Next.module.css";
 
 const Next: React.FC<{

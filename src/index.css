@@ -17,7 +17,6 @@ body, ul, h1, h2, h3, p, button, a, div{
   letter-spacing: 0.2rem;
   list-style-type: none;
   text-decoration: none;
-  /* border: 0.1rem solid red;   */
   box-sizing: border-box;
 }
 
@@ -27,13 +26,19 @@ body{
   overflow: hidden;
 }
 
-button{
+button,
+button:active,
+button:focus {
+  width: 100%;
   color: white;
   padding: 1rem 2rem;
   font-size: 1.6rem;
   background: transparent;
   border-radius: 5rem;
   border: 0.1rem solid white;
+  outline: none;
   cursor: pointer;
   opacity: 0.7;
+  margin-top: 3rem;
 }
+

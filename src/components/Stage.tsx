@@ -1,8 +1,8 @@
 import { useRef, useEffect } from "react";
-import data from "../../utils/constants";
-import { TETRIMINOS } from "../../utils/tetriminos";
-import type { StageState, Player, GameState } from "../../utils/types";
-import { drawSquare } from "../../utils/functions";
+import data from "../utils/constants";
+import { TETRIMINOS } from "../utils/tetriminos";
+import type { StageState, Player, GameState } from "../utils/types";
+import { drawSquare } from "../utils/functions";
 
 const COLS = data.COLS;
 const ROWS = data.ROWS;

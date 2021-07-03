@@ -15,8 +15,8 @@
 }
 
 .board {
-    background-color:rgba(0, 0, 0, 0.034);
-    box-shadow: 0 0 8px white;
+    background-color:transparent;
+    box-shadow: 0 1rem 3rem rgb(82, 78, 78);
 }
 
 .aside {
