@@ -1,5 +1,7 @@
 ## Tetris
-A vanilla tetris app built on react.
+A vanilla tetris app built on react. 
+
+[PLAY NOW]("http://modiem.github.io/tetris-react")
 
 ## Referece
 1. Tutorial from [@Michael Karén](https://github.com/melcor76), [Game Development with JavaScript: Creating Tetris](https://www.educative.io/courses/game-development-js-tetris).
